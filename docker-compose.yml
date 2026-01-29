@@ -6,16 +6,22 @@ services:
       MYSQL_USER: se_shamir
       MYSQL_PASSWORD: se_pass
       MYSQL_ROOT_PASSWORD: root_pass
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   redis:
     image: redis:7-alpine
 
   web:
     build: .
     ports:
-      - "8000:8000"
+        - "8000:8000"
     volumes:
       - .:/app
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
