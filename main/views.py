@@ -11,7 +11,7 @@ def login_view(request):
         )
         if user:
             login(request, user)
-            return redirect("home")
+            return redirect("landing")
     return render(request, "main/login.html")
 
 def signup_view(request):
@@ -22,5 +22,11 @@ def signup_view(request):
             password=request.POST.get("password"),
         )
         login(request, user)
-        return redirect("home")
+        return redirect("landing")
     return render(request, "main/signup.html")
+
+def home_view(request):
+    return render(request, "main/home.html")
+
+def landing_view(request):
+    return render(request, "main/landing_page.html")
