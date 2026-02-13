@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 def login_view(request):
@@ -28,5 +29,15 @@ def signup_view(request):
 def home_view(request):
     return render(request, "main/home.html")
 
+@login_required
 def landing_view(request):
     return render(request, "main/landing_page.html")
+
+@login_required
+def upload_view(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        video_file = request.FILES.get("video")
+        Video.objects.create(user=request.user, title=title, video=video_file)
+        return redirect("home")
+    return render(request, "main/upload_video.html")
