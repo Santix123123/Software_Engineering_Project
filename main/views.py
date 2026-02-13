@@ -1,3 +1,43 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
-# Create your views here.
+def login_view(request):
+    if request.method == "POST":
+        user = authenticate(
+            request,
+            username=request.POST.get("username"),
+            password=request.POST.get("password"),
+        )
+        if user:
+            login(request, user)
+            return redirect("landing")
+    return render(request, "main/login.html")
+
+def signup_view(request):
+    if request.method == "POST":
+        user = User.objects.create_user(
+            username=request.POST.get("username"),
+            email=request.POST.get("email"),
+            password=request.POST.get("password"),
+        )
+        login(request, user)
+        return redirect("landing")
+    return render(request, "main/signup.html")
+
+def home_view(request):
+    return render(request, "main/home.html")
+
+@login_required
+def landing_view(request):
+    return render(request, "main/landing_page.html")
+
+@login_required
+def upload_view(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        video_file = request.FILES.get("video")
+        Video.objects.create(user=request.user, title=title, video=video_file)
+        return redirect("home")
+    return render(request, "main/upload_video.html")
