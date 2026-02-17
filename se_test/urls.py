@@ -11,5 +11,5 @@ urlpatterns = [
     path("landing/", landing_view, name="landing"),
     path("login/", login_view, name="login"),
     path("signup/", signup_view, name="signup"),
-    path("upload/", upload_view, name="upload"),
+    path("upload_video/", upload_view, name="upload"),
 ]
