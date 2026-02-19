@@ -47,7 +47,7 @@
             <h5 class="mb-4">Software Engineering Project Studio</h5>
 
             <div class="mb-3 text-muted">Manage</div>
-            <a href="#" class="text-decoration-none mb-2">Home</a>
+            <a href="{% url 'landing' %}" class="text-decoration-none mb-2">Home</a>
             <a href="#" class="text-decoration-none mb-2">Posts</a>
             <a href="#" class="text-decoration-none mb-2">Analytics</a>
             <a href="#" class="text-decoration-none mb-2">Comments</a>
@@ -78,7 +78,8 @@
 
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="file" name="video" class="form-control mb-3">
+                    <input type="text" name="title" class="form-control mb-3" placeholder="Enter video title" required>
+                    <input type="file" name="video" class="form-control mb-3" required>
                     <button type="submit" class="btn btn-danger px-4">
                         Select video
                     </button>
