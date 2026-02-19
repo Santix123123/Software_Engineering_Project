@@ -51,3 +51,10 @@ def profile_view(request):
     return render(request, "main/profile.html", {
         "videos": videos
     })
+
+@login_required
+def show_video_view(request, video_id):
+    video = Video.objects.get(id=video_id)
+    return render(request, "main/show_video.html", {
+    "video": video
+    })
