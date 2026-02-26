@@ -29,7 +29,7 @@ $(document).ready(function() {
                 </video>
 
                 <div class="card-body">
-                    <h5 class="card-title">${data.title}</h5>
+                    <h5 class="card-title text-light">${data.title}</h5>
                     <p class="card-text text-secondary">
                         Uploaded by ${data.uploaded_by} • ${timeAgo(data.uploaded_at)} ago
                     </p>

@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .models import Video
@@ -49,10 +48,7 @@ def upload_view(request):
 
 @login_required
 def profile_view(request):
-    videos = Video.objects.filter(user=request.user).order_by("-uploaded_at")
-    return render(request, "main/profile.html", {
-        "videos": videos
-    })
+    return render(request, "main/profile.html")
 
 @login_required
 def show_video_view(request, video_id):
@@ -72,3 +68,19 @@ def video_detail(request, video_id):
         "uploaded_by": video.user.username,
         "uploaded_at": video.uploaded_at.isoformat(),
     })
+
+@login_required
+def videos_view(request):
+    videos = Video.objects.filter(user=request.user).order_by("-uploaded_at")
+
+    data = []
+    
+    for video in videos:
+        data.append({
+            "id": video.id,
+            "title": video.title,
+            "video_url": video.video.url,
+            "uploaded_at": video.uploaded_at.isoformat(),
+        })
+
+    return JsonResponse(data, safe=False)
