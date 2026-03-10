@@ -30,6 +30,7 @@ def signup_view(request):
         return redirect("landing")
     return render(request, "main/signup.html")
 
+@login_required
 def home_view(request):
     return render(request, "main/home.html")
 
@@ -39,11 +40,6 @@ def landing_view(request):
 
 @login_required
 def upload_view(request):
-    if request.method == "POST":
-        title = request.POST.get("title")
-        video_file = request.FILES.get("video")
-        Video.objects.create(user=request.user, title=title, video=video_file)
-        return redirect("home")
     return render(request, "main/upload_video.html")
 
 @login_required
@@ -84,3 +80,29 @@ def videos_view(request):
         })
 
     return JsonResponse(data, safe=False)
+
+@login_required
+def upload_video_api(request):
+    if request.method == "POST":
+        video_file = request.FILES.get("video")
+
+        if not video_file:
+            return JsonResponse({"error": "No video file provided"}, status=400)
+    
+        filename = os.path.splitext(video_file.name)[0]
+
+        video = Video.objects.create(
+            user=request.user,
+            title=filename,
+            video=video_file
+        )
+
+        return JsonResponse({
+            "message": "Video uploaded successfully",
+            "id": video.id,
+            "title": video.title,
+            "video_url": video.video.url,
+            "uploaded_at": video.uploaded_at.isoformat(),
+        }, status=201)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from main.views import home_view, login_view, signup_view, landing_view, upload_view, profile_view, show_video_view, video_detail, videos_view
+from main.views import home_view, login_view, signup_view, landing_view, upload_view, profile_view, show_video_view, video_detail, videos_view, upload_video_api
 from django.contrib.auth.decorators import login_required
 from main.views import *
 from django.conf import settings
@@ -17,7 +17,8 @@ urlpatterns = [
     path("video/<int:video_id>/", show_video_view, name="show_video"),
 
     path("videos/<int:video_id>/", video_detail, name="video-detail"),
-    path("videos/", videos_view, name="videos")
+    path("videos/", videos_view, name="videos"),
+    path("videos/upload/", upload_video_api, name="video-upload-api"),
 ]
 
 if settings.DEBUG:
